@@ -1,0 +1,46 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+	Name = "X9 Loading Hub",
+	LoadingTitle = "X9 On Top",
+	LoadingSubtitle = "by ScrimzyW | Jay2Compy",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "X9ScriptHub",
+		FileName = "X9"
+	},
+	Discord = {
+		Enabled = true,
+		Invite = "JsZs37pWRp",
+		RememberJoins = true
+	},
+	KeySystem = true,
+	KeySettings = {
+		Title = "X9",
+		Subtitle = "Key System",
+		Note = "https://pornhub.com",
+		FileName = "X9KeySystem",
+		SaveKey = true,
+		GrabKeyFromSite = false,
+		Key = {"IEatDogShit"}
+	}
+})
+
+local SG = Window:CreateTab("Supported Games", 6034837801)
+
+local Lifetogether = SG:CreateButton({
+	Name = "Lifetogether RP",
+	Callback = function()
+		Rayfield:Destroy()
+		loadstring(game:HttpGet("https://gist.githubusercontent.com/760DxvilzObfuscate/7feb4ff54d58f7197374e18f632e15b2/raw/54bcc23f09445de3a4449452b0874fa4f3daba95/LTRP"))()
+	end,
+})
+
+local KJMoveset = SG:CreateButton({
+	Name = "KJ Moveset",
+	Callback = function()
+		Rayfield:Destroy()
+		loadstring(game:HttpGet("https://gist.githubusercontent.com/760DxvilzObfuscate/b2626e6268977df83fda008c29f6da07/raw/780191f75dc9b3b0c5614ab4966ab74a1ef7b5b2/KJ"))()
+	end,
+})
+
+local Paragraph = SG:CreateParagraph({Title = "Rules", Content = "If you share any of the following content it may result in a blacklist from all of our exploits (Script, Script Hub, Script Link, Key Link), Don't try to bypass any of the linkvertise because im broke as shit and i need money."})
