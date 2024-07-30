@@ -1103,15 +1103,13 @@ function initLibrary()
 					local options = utility.table(opts)
 					local min = options.min or 0
 					local max = options.max or 100
-					local valueText = options.Name or "Slider: [VALUE]/" .. tostring(max)
+					local valueText = options.Name..": [VALUE]/" .. tostring(max) or "Slider: [VALUE]/" .. tostring(max)
 					local default = options.default or math.clamp(0, min, max)
 					local decimals = options.decimals or 0.1
 					local flag = options.flag
 					local callback = options.callback or function() end
 
-
 					decimals = math.floor(10^decimals)
-
 
 					if flag then
 						library.flags[flag] = default
@@ -1187,7 +1185,6 @@ function initLibrary()
 
 						value = math.floor((((max - min) * sizeX) + min) * decimals) / decimals * 2
 						title.Text = valueText:gsub("%[VALUE%]", tostring(value))
-
 
 						if flag then
 							library.flags[flag] = value
