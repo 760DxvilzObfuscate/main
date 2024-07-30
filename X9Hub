@@ -1183,7 +1183,7 @@ function initLibrary()
 						fill.Size = UDim2.new(sizeX, 0, 1, 0)
 
 
-						value = math.floor((((max - min) * sizeX) + min) * decimals) / decimals * 2
+						value = math.floor((((max - min) * sizeX) + min) * decimals) / decimals * 1
 						title.Text = valueText:gsub("%[VALUE%]", tostring(value))
 
 						if flag then
