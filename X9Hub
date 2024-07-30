@@ -1103,7 +1103,7 @@ function initLibrary()
 					local options = utility.table(opts)
 					local min = options.min or 0
 					local max = options.max or 100
-					local valueText = options.Name..": [VALUE]/" .. tostring(max) or "Slider: [VALUE]/" .. tostring(max)
+					local valueText = tostring(options.Name)..": [VALUE]/" .. tostring(max) or "Slider: [VALUE]/" .. tostring(max)
 					local default = options.default or math.clamp(0, min, max)
 					local decimals = options.decimals or 0.1
 					local flag = options.flag
