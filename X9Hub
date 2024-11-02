@@ -5,23 +5,24 @@ function initLibrary()
 		makefolder(folderName)
 	end
 
-
 	local gameConfigFolder = folderName .. "/" .. game.PlaceId
-
 
 	if not isfolder(gameConfigFolder) then
 		makefolder(gameConfigFolder)
 	end
-
 
 	local inputService = game:GetService("UserInputService")
 	local tweenService = game:GetService("TweenService")
 	local runService = game:GetService("RunService")
 	local coreGui = game:GetService("CoreGui")
 
+	for i, v in pairs(coreGui:GetChildren()) do
+		if v.Name == "X9Hub" and v:IsA("ScreenGui") then
+			v:Destroy()
+		end
+	end
 
 	local utility = {}
-
 
 	function utility.create(class, properties)
 		properties = properties or {}
@@ -49,7 +50,6 @@ function initLibrary()
 		return obj
 	end
 
-
 	function utility.change_color(color, amount)
 		local r = math.clamp(math.floor(color.r * 255) + amount, 0, 255)
 		local g = math.clamp(math.floor(color.g * 255) + amount, 0, 255)
@@ -58,7 +58,6 @@ function initLibrary()
 
 		return Color3.fromRGB(r, g, b)
 	end
-
 
 	function utility.get_rgb(color)
 		local r = math.floor(color.r * 255)
@@ -69,7 +68,6 @@ function initLibrary()
 		return r, g, b
 	end
 
-
 	function utility.tween(obj, info, properties, callback)
 		local anim = tweenService:Create(obj, TweenInfo.new(unpack(info)), properties)
 		anim:Play()
@@ -79,7 +77,6 @@ function initLibrary()
 			anim.Completed:Connect(callback)
 		end
 	end
-
 
 	function utility.drag(obj, dragSpeed)
 		local start, objPosition, dragging
@@ -108,21 +105,17 @@ function initLibrary()
 		end)
 	end
 
-
 	function utility.get_center(sizeX, sizeY)
 		return UDim2.new(0.5, -(sizeX / 2), 0.5, -(sizeY / 2))
 	end
-
 
 	function utility.hex_to_rgb(hex)
 		return Color3.fromRGB(tonumber("0x" .. hex:sub(2, 3)), tonumber("0x" .. hex:sub(4, 5)), tonumber("0x"..hex:sub(6, 7)))
 	end
 
-
 	function utility.rgb_to_hex(color)
 		return string.format("#%02X%02X%02X", math.clamp(color.R * 255, 0, 255), math.clamp(color.G * 255, 0, 255), math.clamp(color.B * 255, 0, 255))
 	end
-
 
 	function utility.table(tbl)
 		local oldtbl = tbl or {}
@@ -153,7 +146,7 @@ function initLibrary()
 		flags = {}, 
 		toggled = true,
 		color = Color3.fromRGB(255, 0, 0),
-		keybind = Enum.KeyCode.RightShift, 
+		keybind = Enum.KeyCode.RightControl, 
 		dragSpeed = 0.1
 	}    
 
@@ -175,7 +168,7 @@ function initLibrary()
 
 
 	local gui = utility.create("ScreenGui")
-
+	gui.Name = "X9Hub"
 
 	inputService.InputBegan:Connect(function(input)
 		if input.KeyCode == library.keybind then
@@ -276,7 +269,6 @@ function initLibrary()
 			configstr = configstr .. "['" .. flag .. "']='" .. tostring(library.flags[flag]) .. "',"
 		end
 
-
 		configstr = (count > 0 and configstr:sub(1, -2) or configstr) .. "},multidropdowns={"
 
 
@@ -296,7 +288,6 @@ function initLibrary()
 			configstr = configstr .. "['" .. flag .. "']=" .. tostring(library.flags[flag]) .. ","
 		end
 
-
 		configstr = (count > 0 and configstr:sub(1, -2) or configstr) .. "},colorpickers={"
 
 
@@ -312,8 +303,6 @@ function initLibrary()
 
 		writefile(gameConfigFolder .. "/" .. name .. ".cfg", "return " .. configstr)
 	end
-
-
 
 
 	function library:Load(opts)
@@ -362,7 +351,6 @@ function initLibrary()
 			Parent = topbar
 		})
 
-
 		local tabs = utility.create("Frame", {
 			ZIndex = 2,
 			Size = UDim2.new(1, -8, 1, -64),
@@ -381,13 +369,29 @@ function initLibrary()
 			Parent = main
 		})
 
-
-		local tabTogglesHolder = utility.create("Frame", {
-			Size = UDim2.new(1, -12, 1, 0),
-			Position = UDim2.new(0, 6, 0, 0),
+		utility.create("UIStroke", {
+			Color = color,
+			Thickness = 1.45,
+			Transparency = 0.3,
+			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+			LineJoinMode = Enum.LineJoinMode.Miter,
 			Parent = tabToggles
 		})
 
+		utility.create("UIStroke", {
+			Color = color,
+			Thickness = 1.45,
+			Transparency = 0.3,
+			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+			LineJoinMode = Enum.LineJoinMode.Miter,
+			Parent = main
+		})
+
+		local tabTogglesHolder = utility.create("Frame", {
+			Size = UDim2.new(1, -12, 1, 0), --12
+			Position = UDim2.new(0, 6, 0, 0),
+			Parent = tabToggles
+		})
 
 		utility.create("UIListLayout", {
 			FillDirection = Enum.FillDirection.Horizontal,
@@ -396,9 +400,7 @@ function initLibrary()
 			Parent = tabTogglesHolder
 		})
 
-
 		local windowTypes = utility.table({count = 0})
-
 
 		function windowTypes:Show()
 			gui.Enabled = true
@@ -553,7 +555,6 @@ function initLibrary()
 					BackgroundColor3 = Color3.fromRGB(22, 22, 22),
 					Parent = section
 				})
-
 
 				utility.create("TextLabel", {
 					ZIndex = 3,
@@ -923,13 +924,10 @@ function initLibrary()
 					local flag = options.flag
 					local callback = options.callback or function() end
 
-
 					boxType = boxType:lower()
-
 
 					if boxType == "number" then
 						default = default:gsub("%D+", "")
-
 
 						if flag then
 							library.flags[flag] = tonumber(default)
@@ -969,7 +967,6 @@ function initLibrary()
 						Parent = boxHolder
 					})
 
-
 					local bg = utility.create("Frame", {
 						ZIndex = 3,
 						Size = UDim2.new(1, 0, 1, 0),
@@ -978,7 +975,6 @@ function initLibrary()
 						BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 						Parent = box
 					})
-
 
 					utility.create("UIGradient", {
 						Rotation = 90,
@@ -1007,7 +1003,6 @@ function initLibrary()
 						end
 					end)
 
-
 					local boxTypes = utility.table()
 
 
@@ -1030,9 +1025,8 @@ function initLibrary()
 
 
 					function boxTypes:Set(str)
-						if boxType == "string" then
+						if boxType == "string" or boxType == "player" then
 							box.Text = str
-
 
 							if flag then
 								library.flags[flag] = str
@@ -1056,9 +1050,28 @@ function initLibrary()
 
 
 					box.FocusLost:Connect(function()
-						boxTypes:Set(box.Text)
-					end)
+						if boxType == "player" then
+							local closestMatch = nil
+							local closestDistance = math.huge
 
+							for _, player in pairs(game.Players:GetPlayers()) do
+								local playerName = player.Name:lower()
+								local distance = string.find(playerName, box.Text:lower(), 1, true) or math.huge
+
+								if distance <= closestDistance then
+									closestDistance = distance
+									closestMatch = player
+								end
+							end
+
+							if closestMatch then
+								boxTypes:Set(closestMatch.Name)
+							end
+
+						else
+							boxTypes:Set(box.Text)
+						end
+					end)
 
 					function boxTypes:SetType(str)
 						if str:lower() == "number" or str:lower() == "string" then
@@ -1114,7 +1127,6 @@ function initLibrary()
 					if flag then
 						library.flags[flag] = default
 					end
-
 
 					callback(default)
 
@@ -1184,7 +1196,7 @@ function initLibrary()
 
 
 						value = math.floor((((max - min) * sizeX) + min) * decimals) / decimals * 1
-						title.Text = valueText:gsub("%[VALUE%]", tostring(value))
+						title.Text = valueText:gsub("%[VALUE%]", math.floor(tostring(value)))
 
 						if flag then
 							library.flags[flag] = value
@@ -2184,11 +2196,9 @@ function initLibrary()
 					local flag = options.flag
 					local callback = options.callback or function() end
 
-
 					if flag then
 						library.flags[flag] = default
 					end
-
 
 					local keys = {
 						[Enum.KeyCode.LeftShift] = "Left Shift";
